@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.mvc.member.dao.MemberDAO">
+		<insert id="join">
+			INSERT INTO member(id,pw,name,email)
+				VALUES(#{param1},#{param2},#{param3},#{param4})
+		</insert>
+		
+		<!-- select 문은 결과 값이 존재하므로 resultType을 지정해준다. -->
+		<select id="login" resultType="String"> <!--  받아올 id는 문자열 -->
+			SELECT id FROM member
+				 WHERE id=#{param1} AND pw=#{param2}
+		</select>
+		
+		<!--  가져오는 데이터의 컬럼이 1개 이상일 경우 DTO를 사용한다. -->
+		<!--  사용할 DTO는 풀 경로를 명시해야 한다. -->
+		<select id="list" resultType="com.mvc.member.dto.MemberDTO">
+			SELECT id,pw,name,email FROM member
+		</select>
+		
+		<!-- parameterType 을 사용하면 param1 대신에 변수명으로 대체할 수 있다. -->
+		<delete id="delete" parameterType="String">
+			DELETE FROM member WHERE id= #{id} <!-- #{param1} 대신에 #{id}로 대체 -->
+		</delete>
+		
+		<select id="detail" 
+			resultType="com.mvc.member.dto.MemberDTO"
+			parameterType="String">
+			SELECT * FROM member WHERE id=#{id} <!-- param1을 id로 바꿔줌 -->
+		</select>
+		
+		<update id="update">
+			UPDATE member SET
+				pw= #{param2} 
+				,name= #{param3} 
+				,email= #{param4} 
+			WHERE id= #{param1}
+		</update>
+	</mapper>
